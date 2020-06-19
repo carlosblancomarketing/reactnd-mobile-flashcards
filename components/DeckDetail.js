@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { connect } from 'react-redux';
+import { Dimensions } from 'react-native';
+
 
 import TextButton from './TextButton';
 import DeckListItem from './DeckListItem';
@@ -9,6 +11,20 @@ import { deleteDeck } from '../actions/decks';
 
 
 class DeckDetail extends Component {
+    state = {
+        opacity: new Animated.Value(0),
+    }
+
+    componentDidMount() {
+        const { opacity } = this.state;
+
+
+
+        Animated.timing(opacity, { toValue: 1, duration: 1000 })
+            .start()
+
+    }
+
     delete = () => {
         const { deck, dispatch, navigation } = this.props;
         dispatch(deleteDeck(deck))
@@ -17,10 +33,11 @@ class DeckDetail extends Component {
 
     render() {
         const { deck } = this.props;
+        const { opacity } = this.state;
 
         return (
-            <View>
-                <Text style={styles.title}>{deck.title}</Text>
+            <Animated.View style={[{ opacity }]}>
+                <Animated.Text style={styles.title}>{deck.title}</Animated.Text>
                 <Text style={styles.cards}>{deck.cards.length} cards</Text>
 
                 <TextButton style={styles.addCard}
@@ -48,7 +65,7 @@ class DeckDetail extends Component {
                     Delete Deck
                 </TextButton>
 
-            </View>
+            </Animated.View>
         )
     }
 }
