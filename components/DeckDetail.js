@@ -5,8 +5,16 @@ import { connect } from 'react-redux';
 import TextButton from './TextButton';
 import DeckListItem from './DeckListItem';
 
+import { deleteDeck } from '../actions/decks';
+
 
 class DeckDetail extends Component {
+    delete = () => {
+        const { deck, dispatch, navigation } = this.props;
+        dispatch(deleteDeck(deck))
+        navigation.navigate("Decks")
+    }
+
     render() {
         const { deck } = this.props;
 
@@ -16,7 +24,6 @@ class DeckDetail extends Component {
                 <Text style={styles.cards}>{deck.cards.length} cards</Text>
 
                 <TextButton style={styles.addCard}
-                    key={deck.id}
                     onPress={() => this.props.navigation.navigate(
                         'Add Card',
                         { deck: deck }
@@ -26,7 +33,6 @@ class DeckDetail extends Component {
                 </TextButton>
 
                 <TextButton style={styles.startQuiz}
-                    key={deck.id}
                     onPress={() => this.props.navigation.navigate(
                         'Quiz',
                         { deckId: deck.id }
@@ -36,7 +42,9 @@ class DeckDetail extends Component {
                 </TextButton>
 
 
-                <TextButton style={styles.deleteDeck}>
+                <TextButton
+                    onPress={this.delete}
+                    style={styles.deleteDeck}>
                     Delete Deck
                 </TextButton>
 

@@ -1,5 +1,6 @@
 import { ADD_DECK } from '../actions/decks'
 import { ADD_CARD } from '../actions/cards'
+import { DELETE_DECK } from '../actions/decks';
 
 
 export default function decks(state = {}, action) {
@@ -18,6 +19,12 @@ export default function decks(state = {}, action) {
                     ...state[deckId],
                     cards: state[deckId].cards.concat([action.card.id])
                 }
+            }
+        case DELETE_DECK:
+            delete state[action.deck.id]
+            
+            return {
+                ...state
             }
         default:
             return state
