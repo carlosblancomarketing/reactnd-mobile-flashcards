@@ -80,7 +80,8 @@ class Quiz extends Component {
     render() {
         const { completed, showAnswer, remainingCardsIds, correctCards, incorrectCards } = this.state;
         const { cards, deckId } = this.props
-
+        const answeredQuestions = correctCards.length + incorrectCards.length
+        const totalQuestions = remainingCardsIds.length + answeredQuestions
 
         if (completed) {
             return (
@@ -113,7 +114,7 @@ class Quiz extends Component {
             return (
 
                 <View style={styles.center}>
-                    <Text style={styles.cardNumber}>Card #1</Text>
+                    <Text style={styles.cardNumber}>Card {answeredQuestions + 1} of {totalQuestions}</Text>
                     <Text style={styles.question}>{currentCard.question}</Text>
                     {showAnswer && (<Text style={styles.answer}>{currentCard.answer}</Text>)}
 
@@ -140,7 +141,6 @@ class Quiz extends Component {
 const styles = StyleSheet.create({
     center: {
         textAlign: 'center',
-
     },
     cardNumber: {
         fontSize: 20,
