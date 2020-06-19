@@ -66,9 +66,20 @@ class Quiz extends Component {
         }))
     }
 
+    reset = () => {
+
+        this.setState((prevState) => ({
+            remainingCardsIds: prevState.remainingCardsIds.concat(prevState.correctCards, prevState.incorrectCards),
+            completed: false,
+            showAnswer: false,
+            correctCards: [],
+            incorrectCards: [],
+        }))
+    }
+
     render() {
         const { completed, showAnswer, remainingCardsIds, correctCards, incorrectCards } = this.state;
-        const { cards } = this.props
+        const { cards, deckId } = this.props
 
 
         if (completed) {
@@ -77,11 +88,16 @@ class Quiz extends Component {
                     <Text style={styles.question}>Score</Text>
                     <Text style={styles.score}> {`${correctCards.length} / ${correctCards.length + incorrectCards.length}`} </Text>
 
-                    <TextButton >
+                    <TextButton onPress={this.reset}>
                         Repeat Quiz
                     </TextButton>
 
-                    <TextButton >
+                    <TextButton
+                        onPress={() => this.props.navigation.navigate(
+                            'DeckDetail',
+                            { deckId: deckId }
+                        )}
+                    >
                         Return to Deck
                     </TextButton>
                 </View>
@@ -157,7 +173,8 @@ function mapStateToProps({ decks, cards }, { route }) {
 
     return {
         remainingCardsIds,
-        cards
+        cards,
+        deckId
     }
 
 }

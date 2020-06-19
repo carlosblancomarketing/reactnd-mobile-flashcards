@@ -12,8 +12,8 @@ class DeckDetail extends Component {
 
         return (
             <View>
-                <Text>{deck.title}</Text>
-                <Text>{deck.cards.length} cards</Text>
+                <Text style={styles.title}>{deck.title}</Text>
+                <Text style={styles.cards}>{deck.cards.length} cards</Text>
 
                 <TextButton style={styles.addCard}
                     key={deck.id}
@@ -62,7 +62,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderStyle: 'solid',
         backgroundColor: '#fff',
-    }
+    },
+    title: {
+        textAlign: 'center',
+        fontSize: 30,
+        fontWeight: 'bold',
+    },
+    cards: {
+        textAlign: 'center',
+        fontSize: 20,
+    },
 })
 
 function mapStateToProps({ decks }, { route }) {
