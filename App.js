@@ -12,6 +12,7 @@ import { Provider } from 'react-redux'
 import DeckList from './components/DeckList';
 import AddDeck from './components/AddDeck';
 import DeckDetail from './components/DeckDetail';
+import Quiz from './components/Quiz';
 import middleware from './middleware';
 import reducer from './reducers'
 
@@ -93,6 +94,14 @@ const MainNav = () => (
     <Stack.Screen
       name="Add Card"
       component={AddCard}
+      options={{
+        headerTintColor: white, headerStyle: {
+          backgroundColor: black,
+        }
+      }} />
+    <Stack.Screen
+      name="Quiz"
+      component={Quiz}
       options={{
         headerTintColor: white, headerStyle: {
           backgroundColor: black,

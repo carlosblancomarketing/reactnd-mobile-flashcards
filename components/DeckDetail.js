@@ -9,7 +9,7 @@ import DeckListItem from './DeckListItem';
 class DeckDetail extends Component {
     render() {
         const { deck } = this.props;
-        
+
         return (
             <View>
                 <Text>{deck.title}</Text>
@@ -25,9 +25,16 @@ class DeckDetail extends Component {
                     Add Card
                 </TextButton>
 
-                <TextButton style={styles.startQuiz}>
+                <TextButton style={styles.startQuiz}
+                    key={deck.id}
+                    onPress={() => this.props.navigation.navigate(
+                        'Quiz',
+                        { deckId: deck.id }
+                    )}
+                >
                     Start Quiz
                 </TextButton>
+
 
                 <TextButton style={styles.deleteDeck}>
                     Delete Deck

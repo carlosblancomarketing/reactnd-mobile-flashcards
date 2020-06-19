@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import TextButton from './TextButton';
+import { connect } from 'react-redux';
+
 
 class Quiz extends Component {
 
     state = {
         completed: false,
         showAnswer: false,
+        remainingCardsIds: [],
+        correctCards: [],
+        incorrectCards: [],
     }
 
     toogleShowAnswer = () => {
@@ -15,14 +20,62 @@ class Quiz extends Component {
         }))
     }
 
+    componentDidMount() {
+        this.setState({
+            remainingCardsIds: this.props.remainingCardsIds
+        })
+    }
+
+    submitCorrect = () => {
+        let { remainingCardsIds, correctCards } = this.state;
+
+        const currentCardId = remainingCardsIds[0];
+        correctCards = correctCards.concat([currentCardId])
+
+        remainingCardsIds = remainingCardsIds.filter((cardIds) => {
+            return cardIds !== currentCardId
+        });
+
+        const completed = remainingCardsIds.length === 0;
+
+        this.setState((prevState) => ({
+            remainingCardsIds,
+            correctCards,
+            completed,
+            showAnswer: false,
+        }))
+    }
+
+    submitIncorrect = () => {
+        let { remainingCardsIds, incorrectCards } = this.state;
+
+        const currentCardId = remainingCardsIds[0];
+        incorrectCards = incorrectCards.concat([currentCardId])
+
+        remainingCardsIds = remainingCardsIds.filter((cardIds) => {
+            return cardIds !== currentCardId
+        });
+
+        const completed = remainingCardsIds.length === 0;
+
+        this.setState((prevState) => ({
+            remainingCardsIds,
+            incorrectCards,
+            completed,
+            showAnswer: false,
+        }))
+    }
+
     render() {
-        const { completed, showAnswer } = this.state;
+        const { completed, showAnswer, remainingCardsIds, correctCards, incorrectCards } = this.state;
+        const { cards } = this.props
+
 
         if (completed) {
             return (
                 <View style={styles.center}>
                     <Text style={styles.question}>Score</Text>
-                    <Text style={styles.score}> 1/3 </Text>
+                    <Text style={styles.score}> {`${correctCards.length} / ${correctCards.length + incorrectCards.length}`} </Text>
 
                     <TextButton >
                         Repeat Quiz
@@ -33,27 +86,38 @@ class Quiz extends Component {
                     </TextButton>
                 </View>
             )
+        } else if (remainingCardsIds.length === 0) {
+            return (
+                <View>
+                    <Text>Loading</Text>
+                </View>)
+        } else {
+            const currentCard = cards[remainingCardsIds[0]];
+
+            return (
+
+                <View style={styles.center}>
+                    <Text style={styles.cardNumber}>Card #1</Text>
+                    <Text style={styles.question}>{currentCard.question}</Text>
+                    {showAnswer && (<Text style={styles.answer}>{currentCard.answer}</Text>)}
+
+                    <TextButton onPress={this.toogleShowAnswer}>
+                        Show Answer
+                    </TextButton>
+
+                    <TextButton style={styles.correct} onPress={this.submitCorrect}>
+                        Correct
+                    </TextButton>
+
+                    <TextButton style={styles.incorrect} onPress={this.submitIncorrect}>
+                        Incorrect
+                    </TextButton>
+                </View>
+            )
         }
 
-        return (
-            <View style={styles.center}>
-                <Text style={styles.cardNumber}>Card #1</Text>
-                <Text style={styles.question}>How cool is to be cool</Text>
-                {showAnswer && (<Text style={styles.answer}>It's so cool</Text>)}
 
-                <TextButton onPress={this.toogleShowAnswer}>
-                    Show Answer
-                </TextButton>
 
-                <TextButton style={styles.correct}>
-                    Correct
-                </TextButton>
-
-                <TextButton style={styles.incorrect}>
-                    Incorrect
-                </TextButton>
-            </View>
-        )
     }
 }
 
@@ -75,16 +139,27 @@ const styles = StyleSheet.create({
         fontSize: 30,
         textAlign: 'center',
     },
-    score:{
+    score: {
         fontSize: 50,
         fontWeight: 'bold',
     },
-    correct: {
+    incorrect: {
         backgroundColor: '#e53935',
     },
-    incorrect: {
+    correct: {
         backgroundColor: '#43a047',
     }
 })
 
-export default Quiz;
+function mapStateToProps({ decks, cards }, { route }) {
+    const { deckId } = route.params;
+    const remainingCardsIds = decks[deckId].cards
+
+    return {
+        remainingCardsIds,
+        cards
+    }
+
+}
+
+export default connect(mapStateToProps)(Quiz);
