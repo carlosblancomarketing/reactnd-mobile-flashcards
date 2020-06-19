@@ -18,6 +18,7 @@ import reducer from './reducers'
 const store = createStore(reducer, middleware);
 
 import { white, black } from './utils/colors'
+import AddCard from "./components/AddCard";
 
 function ProjectStatusBar({ backgroundColor, ...props }) {
   return (
@@ -84,6 +85,14 @@ const MainNav = () => (
     <Stack.Screen
       name="DeckDetail"
       component={DeckDetail}
+      options={{
+        headerTintColor: white, headerStyle: {
+          backgroundColor: black,
+        }
+      }} />
+    <Stack.Screen
+      name="Add Card"
+      component={AddCard}
       options={{
         headerTintColor: white, headerStyle: {
           backgroundColor: black,

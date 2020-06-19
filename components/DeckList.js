@@ -19,16 +19,15 @@ class DeckList extends Component {
             <View>
 
                 {deckIds.map((deckId) => {
-                    const deck = decks[deckId]
                     return (
                         <TouchableOpacity
                             key={deckId}
                             onPress={() => this.props.navigation.navigate(
                                 'DeckDetail',
-                                { deck: deck }
+                                { deckId: deckId }
                             )}
                         >
-                            <DeckListItem deck={deck} />
+                            <DeckListItem deckId={deckId} />
                         </TouchableOpacity>
                     )
 

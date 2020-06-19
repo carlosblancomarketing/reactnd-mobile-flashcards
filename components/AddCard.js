@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, SafeAreaView } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TextInput,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard,
+    SafeAreaView
+} from 'react-native';
+import { connect } from 'react-redux';
+import { addCard } from '../actions/cards';
 import TextButton from './TextButton';
+import { generateCardId } from '../utils/helpers';
 
 
 class AddCard extends Component {
@@ -21,7 +34,26 @@ class AddCard extends Component {
         });
     }
 
+    submit = () => {
+        const { cardIds, dispatch, deck, navigation } = this.props;
+        
+        const card = {
+            question: this.state.question,
+            answer: this.state.answer,
+            deckId: deck.id,
+            id: generateCardId(cardIds)
+        }
+
+        console.log('card: ', card)
+        dispatch(addCard(card));
+        // navigation.goBack()
+        navigation.navigate({ name: "DeckDetail", deckId: deck.id });
+
+    }
+
     render() {
+        const { deck } = this.props;
+
         return (
             <KeyboardAvoidingView
                 style={styles.container}
@@ -31,7 +63,7 @@ class AddCard extends Component {
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
                         <View style={styles.container}>
-                            <Text style={styles.title}>Add a new Deck</Text>
+                            <Text style={styles.title}>Add a new card to {deck.title}</Text>
 
                             <TextInput
                                 value={this.state.title}
@@ -49,7 +81,10 @@ class AddCard extends Component {
                                 multiline={true}
                             />
 
-                            <TextButton disabled={this.state.question === '' || this.state.answer === ''}>
+                            <TextButton
+                                disabled={this.state.question === '' || this.state.answer === ''}
+                                onPress={this.submit}
+                            >
                                 Add Card
                                 </TextButton>
                         </View>
@@ -84,4 +119,14 @@ const styles = StyleSheet.create({
     }
 })
 
-export default AddCard;
+function mapStateToProps(state, { route }) {
+    const { deck } = route.params;
+    const cardIds = Object.keys(state.cards);
+
+    return {
+        cardIds,
+        deck
+    }
+}
+
+export default connect(mapStateToProps)(AddCard);

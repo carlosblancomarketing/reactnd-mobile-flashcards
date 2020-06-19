@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 class DeckListItem extends Component {
     render() {
@@ -30,4 +31,15 @@ const styles = StyleSheet.create({
     }
 })
 
-export default DeckListItem;
+function mapStateToProps({ decks }, props) {
+    const { deckId } = props;
+    
+    const deck = decks[deckId]
+    
+    return {
+        deck,
+    }
+
+}
+
+export default connect(mapStateToProps)(DeckListItem);

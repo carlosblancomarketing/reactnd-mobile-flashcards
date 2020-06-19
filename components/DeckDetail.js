@@ -9,13 +9,19 @@ import DeckListItem from './DeckListItem';
 class DeckDetail extends Component {
     render() {
         const { deck } = this.props;
-
+        
         return (
             <View>
                 <Text>{deck.title}</Text>
                 <Text>{deck.cards.length} cards</Text>
 
-                <TextButton style={styles.addCard}>
+                <TextButton style={styles.addCard}
+                    key={deck.id}
+                    onPress={() => this.props.navigation.navigate(
+                        'Add Card',
+                        { deck: deck }
+                    )}
+                >
                     Add Card
                 </TextButton>
 
@@ -52,9 +58,9 @@ const styles = StyleSheet.create({
     }
 })
 
-function mapStateToProps({ state }, { route }) {
-    const { deck } = route.params;
-    console.log(deck);
+function mapStateToProps({ decks }, { route }) {
+    const { deckId } = route.params;
+    const deck = decks[deckId]
 
     return {
         deck: deck,
