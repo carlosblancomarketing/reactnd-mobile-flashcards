@@ -11,6 +11,7 @@ import { Provider } from 'react-redux'
 
 import DeckList from './components/DeckList';
 import AddDeck from './components/AddDeck';
+import AddCard from "./components/AddCard";
 import DeckDetail from './components/DeckDetail';
 import Quiz from './components/Quiz';
 import middleware from './middleware';
@@ -19,7 +20,8 @@ import reducer from './reducers'
 const store = createStore(reducer, middleware);
 
 import { white, black } from './utils/colors'
-import AddCard from "./components/AddCard";
+import { setLocalNotification } from './utils/helpers'
+
 
 function ProjectStatusBar({ backgroundColor, ...props }) {
   return (
@@ -40,17 +42,23 @@ const TabNav = () => (
     initialRouteName="AddEntry"
     screenOptions={({ route }) => ({
       tabBarIcon: ({ color, size }) => {
-        let icon;
-        if (route.name === "Decks") {
-          icon = (
-            <MaterialCommunityIcons name="cards" size={size} color={color} />
-          );
-        } else if (route.name === "Add Deck") {
-          icon = (
-            <Ionicons name="md-add-circle" size={size} color={color} />
-          );
+
+        if (Platform.OS === 'ios') {
+
+          let icon;
+          if (route.name === "Decks") {
+            icon = (
+              <MaterialCommunityIcons name="cards" size={size} color={color} />
+            );
+          } else if (route.name === "Add Deck") {
+            icon = (
+              <Ionicons name="md-add-circle" size={size} color={color} />
+            );
+          }
+
+          return icon;
         }
-        return icon;
+
       }
     })}
     tabBarOptions={{
@@ -111,6 +119,10 @@ const MainNav = () => (
 );
 
 export default class App extends React.Component {
+
+  componentDidMount() {
+    setLocalNotification()
+  }
 
   render() {
     return (

@@ -9,7 +9,6 @@ class DeckList extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
         dispatch(setInitialState({}));
-        console.log(this.props)
     }
 
     render() {
