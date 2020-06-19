@@ -140,7 +140,6 @@ class Quiz extends Component {
 
 const styles = StyleSheet.create({
     center: {
-        textAlign: 'center',
     },
     cardNumber: {
         fontSize: 20,

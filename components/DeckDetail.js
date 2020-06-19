@@ -49,7 +49,9 @@ class DeckDetail extends Component {
                     Add Card
                 </TextButton>
 
-                <TextButton style={styles.startQuiz}
+                <TextButton
+                    style={styles.startQuiz}
+                    disabled={this.props.deck.cards.length < 1}
                     onPress={() => this.props.navigation.navigate(
                         'Quiz',
                         { deckId: deck.id }
