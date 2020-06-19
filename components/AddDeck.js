@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { connect } from 'react-redux';
 import TextButton from './TextButton';
+import { addDeck } from '../actions/decks';
+import { generateDeckId } from '../utils/helpers';
+import { NavigationActions } from 'react-navigation'
+
 
 
 class AddDeck extends Component {
@@ -12,6 +17,27 @@ class AddDeck extends Component {
         this.setState({
             title: text,
         });
+    }
+
+    submit = () => {
+        const title = this.state.title;
+        const { deckIds, dispatch } = this.props;
+
+        const deck = {
+            id: generateDeckId(deckIds),
+            title,
+            cards: [],
+        }
+
+        console.log(deck);
+        dispatch(addDeck(deck));
+
+        this.setState({ title: '' });
+        this.toHome();
+    }
+
+    toHome = () => {
+        this.props.navigation.navigate("Decks")
     }
 
     render() {
@@ -26,7 +52,7 @@ class AddDeck extends Component {
                 >
 
                 </TextInput>
-                <TextButton disabled={this.state.title === ""}>
+                <TextButton disabled={this.state.title === ""} onPress={this.submit}>
                     Create Deck
                 </TextButton>
 
@@ -41,19 +67,25 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: 'center',
-        fontSize:30,
+        fontSize: 30,
     },
     textInput: {
-        margin:50,
+        margin: 50,
         borderColor: '#000',
         borderWidth: 1,
         borderStyle: 'solid',
-        justifyContent:'center',
+        justifyContent: 'center',
         fontSize: 20,
-        borderRadius:5,
-        padding:15,
+        borderRadius: 5,
+        padding: 15,
 
     }
 })
 
-export default AddDeck;
+function mapStateToProps({ decks }) {
+    return {
+        deckIds: Object.keys(decks)
+    }
+}
+
+export default connect(mapStateToProps)(AddDeck);

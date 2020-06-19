@@ -3,10 +3,13 @@ import { View, Text, StyleSheet } from 'react-native';
 
 class DeckListItem extends Component {
     render() {
+
+        const { deck } = this.props;
+
         return (
             <View style={styles.deck}>
-                <Text style={styles.title}>Deck title</Text>
-                <Text style={styles.title}>2 cards</Text>
+                <Text style={styles.title}>{deck.title}</Text>
+                <Text style={styles.title}>{deck.cards.length} cards</Text>
             </View>
         )
     }

@@ -6,9 +6,16 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createStackNavigator } from '@react-navigation/stack';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 
 import DeckList from './components/DeckList';
 import AddDeck from './components/AddDeck';
+import DeckDetail from './components/DeckDetail';
+import middleware from './middleware';
+import reducer from './reducers'
+
+const store = createStore(reducer, middleware);
 
 import { white, black } from './utils/colors'
 
@@ -74,7 +81,14 @@ const MainNav = () => (
       name="Home"
       component={TabNav}
       options={{ headerShown: false }} />
-
+    <Stack.Screen
+      name="DeckDetail"
+      component={DeckDetail}
+      options={{
+        headerTintColor: white, headerStyle: {
+          backgroundColor: black,
+        }
+      }} />
   </Stack.Navigator>
 );
 
@@ -82,12 +96,14 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <NavigationContainer>
-          <ProjectStatusBar backgroundColor={black} barStyle="light-content" />
-          <MainNav />
-        </NavigationContainer>
-      </View>
+      <Provider store={store}>
+        <View style={{ flex: 1 }}>
+          <NavigationContainer>
+            <ProjectStatusBar backgroundColor={black} barStyle="light-content" />
+            <MainNav />
+          </NavigationContainer>
+        </View>
+      </Provider>
     );
   }
 }
