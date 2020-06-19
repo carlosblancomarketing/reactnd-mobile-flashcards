@@ -21,7 +21,7 @@ class AddDeck extends Component {
 
     submit = () => {
         const title = this.state.title;
-        const { deckIds, dispatch } = this.props;
+        const { deckIds, dispatch, navigation } = this.props;
 
         const deck = {
             id: generateDeckId(deckIds),
@@ -33,7 +33,9 @@ class AddDeck extends Component {
         dispatch(addDeck(deck));
 
         this.setState({ title: '' });
-        this.toHome();
+        navigation.navigate('DeckDetail', { 
+            deckId: deck.id 
+        });
     }
 
     toHome = () => {
